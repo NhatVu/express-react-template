@@ -1,0 +1,23 @@
+{
+  "name": "todo-api",
+  "version": "1.0.0",
+  "description": "todo-api + front-end with angularjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Minh Nhat",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
+    "is-my-json-valid": "^2.13.1",
+    "jsonwebtoken": "^7.1.6",
+    "moment": "^2.14.1",
+    "mongoose": "^4.5.7",
+    "morgan": "^1.7.0",
+    "winston": "^2.2.0"
+  }
+}
