@@ -15,11 +15,5 @@ var TokenSchema = new mongoose.Schema({
 	}
 });
 
-// we should encrypt token string before save to database, and decrypt when we need.
-TokenSchema.pre('save', function(next){
-	if(this.token){
-		this.token = edCrypto.encryptString(this.token);
-	}
-	next();
-})
+
 mongoose.model('Token', TokenSchema);

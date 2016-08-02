@@ -2,10 +2,13 @@
 
 var express = require('express');
 var todoController = require('../controllers/todo.server.controller');
+var authenticationMiddleware = require('../controllers/authenticationMiddleware.server.controller');
+
 
 module.exports = function(app){
 	var router = express.Router();
 
+	router.use(authenticationMiddleware.requireAuthentication);
 	router.route('/todos')
 			.get(todoController.readAll)
 			.post(todoController.create);

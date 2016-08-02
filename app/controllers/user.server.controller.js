@@ -4,6 +4,7 @@ var User = require('mongoose').model('User');
 var Token = require('mongoose').model('Token');
 var validator = require('is-my-json-valid');
 var winston = require('winston');
+var moment = require('moment');
 
 var validate =  validator({
 	required: true,
@@ -36,7 +37,6 @@ module.exports.signup = function(req, res){
 };
 
 module.exports.login = function(req, res){
-	winston.info('user.server.controller login function called');
 	var body = req.body;
 	validate(body);
 	if(validate.errors !== null){
@@ -50,7 +50,7 @@ module.exports.login = function(req, res){
 		var token = user.generateToken();
 		var tokenModelInstace = new Token({
 			token: token,
-			lastVisited: new Date()
+			lastVisited: moment()
 		});
 
 		userInstance = user;
@@ -67,11 +67,11 @@ module.exports.login = function(req, res){
 };
 
 module.exports.logout = function(req, res){
-	var token = req.header('Auth');
+	var token = req.header('Auth') || req.query.access_token || "";
 	Token.remove({
 		token: token
 	}).then(function(token){
-		if(token == null)
+		if(token.result.n !== 0)
 			res.send('logout success');
 		else
 			throw new Error("You haven't yet logged in");

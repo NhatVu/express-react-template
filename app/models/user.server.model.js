@@ -80,6 +80,7 @@ UserSchema.statics.authenticate = function(body){
 
 /**
  * generate token when user login to the system. Only contain user._id, for security
+ * first, encrypt stringData, after that, sign with jwt
  * @return token [description]
  */
 UserSchema.methods.generateToken = function(){
