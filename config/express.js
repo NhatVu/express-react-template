@@ -22,6 +22,7 @@ module.exports = function(){
 	// routing file
 	require('../app/routes/user.server.route')(app);
 	require('../app/routes/todo.server.route')(app);
+	require('../app/routes/facebookOAuth.server.route')(app);
 
 	app.use(express.static('./public'));
 

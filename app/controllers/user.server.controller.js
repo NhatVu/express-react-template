@@ -6,7 +6,7 @@ var validator = require('is-my-json-valid');
 var winston = require('winston');
 var moment = require('moment');
 
-var validate =  validator({
+var validate = validator({
 	required: true,
 	type: 'object',
 	properties: {
@@ -14,7 +14,7 @@ var validate =  validator({
 			required: true,
 			type: 'string'
 		},
-		password:{
+		password: {
 			required: true,
 			type: 'string'
 		}
@@ -22,34 +22,46 @@ var validate =  validator({
 });
 
 
-module.exports.signup = function(req, res){
+module.exports.signup = function (req, res) {
 	var body = req.body; // body contain email and password
 	// validate input in angluarjs. front-end
-	var user = new User(body);
-	// user default role is user, Admine will set role for user after that.
-	user.role= 'user';
-	
-	user.save().then(function(user){
-		res.json(user.toPublicJSON());
-	}).catch(function(err){
+	// find if email exist don db
+	User.findOne({
+		email: body.email
+	}).then(function (user) {
+		// if user exist
+		if (user) {
+			user.password = body.password;
+			return user.save();
+		} else {
+			var user = new User(body);
+			// user default role is user, Admine will set role for user after that.
+			user.role = 'user';
+			return user.save();
+		}
+	}).then(function(userR){
+		res.json(userR.toPublicJSON());
+	}).catch(function (err) {
+		winston.log('error', 'local signup error', err);
 		res.status(404).json(err);
-	});
+	})
 };
 
-module.exports.login = function(req, res){
+module.exports.login = function (req, res) {
 	var body = req.body;
 	validate(body);
-	if(validate.errors !== null){
+	if (validate.errors !== null) {
 		res.send(401).send('Invalid email or password');
 		return;
 	}
 
 	// authenticate
 	var userInstance;
-	User.authenticate(body).then(function(user){
+	User.authenticate(body).then(function (user) {
 		var token = user.generateToken();
 		var tokenModelInstace = new Token({
 			token: token,
+			provider: 'local',
 			lastVisited: moment()
 		});
 
@@ -57,26 +69,26 @@ module.exports.login = function(req, res){
 
 		return tokenModelInstace.save();
 
-	}).then(function(tokenInstace){
+	}).then(function (tokenInstace) {
 		res.header('Auth', tokenInstace.token).json(userInstance.toPublicJSON());
 
-	}).catch(function(err){
+	}).catch(function (err) {
 		winston.log('error', "authenicate error")
 		res.send(err);
 	});
 };
 
-module.exports.logout = function(req, res){
+module.exports.logout = function (req, res) {
 	var token = req.header('Auth') || req.query.access_token || "";
 	Token.remove({
 		token: token
-	}).then(function(token){
-		if(token.result.n !== 0)
+	}).then(function (token) {
+		if (token.result.n !== 0)
 			res.send('logout success');
 		else
 			throw new Error("You haven't yet logged in");
 
-	}).catch(function(err){
+	}).catch(function (err) {
 		winston.log('error', 'logout error : ', err);
 		res.status(404).send('logout error');
 	})

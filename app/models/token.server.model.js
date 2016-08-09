@@ -9,6 +9,7 @@ var TokenSchema = new mongoose.Schema({
 			return token && token.length > 6;
 		}, 'Invalid token length']
 	},
+	provider : String,
 	lastVisited: {
 		type: Date,
 		required: true

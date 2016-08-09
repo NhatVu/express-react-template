@@ -19,6 +19,7 @@ var UserSchema = new mongoose.Schema({
 	role: {
 		type: String
 	},
+	providerData : {},
 	created: {
 		type: Date,
 		default: Date.now
@@ -32,15 +33,12 @@ var UserSchema = new mongoose.Schema({
  * @return {[type]}           [description]
  */
 UserSchema.pre('save', function(next){
-	if(this.password){
+	// if salt is undifined 
+	if(this.password && !this.salt ){
 		this.salt = crypto.randomBytes(64).toString('base64');
 		this.password = this.encryptPassword(this.password);
-		next();
-	} else{
-		next(new Error('pre save user model error'));
 	}
-
-
+	next();
 });
 
 /**
@@ -134,6 +132,22 @@ UserSchema.methods.toPublicJSON = function() {
 	tempt.created = this.created;
 
 	return tempt;
+}
+
+/*
+
+ */
+UserSchema.statics.findByEmail = function(email){
+	var self = this;
+	return new Promise(function(resolve, reject){
+		self.find({
+			email: email
+		}).then(function(user){
+			resolve(user);
+		}).catch(function(err){
+			return reject(err);
+		})
+	});
 }
 
 mongoose.model('User', UserSchema);
