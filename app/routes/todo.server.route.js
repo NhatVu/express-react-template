@@ -8,7 +8,7 @@ var authenticationMiddleware = require('../controllers/authenticationMiddleware.
 module.exports = function(app){
 	var router = express.Router();
 
-	router.use(authenticationMiddleware.requireAuthentication);
+	router.use(authenticationMiddleware.apiAuthentication);
 	router.route('/todos')
 			.get(todoController.readAll)
 			.post(todoController.create);

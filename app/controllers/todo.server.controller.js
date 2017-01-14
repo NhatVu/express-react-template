@@ -27,13 +27,13 @@ var validate = validator({
 
 module.exports.create = function(req, res) {
 	var body = req.body;
-	var user = req.user;
+	var user = req.session.user;
 	validate(body);
 	if (validate.errors !== null)
 		return res.status(412).send('request contain invalid');
 
 	var todo = new Todo(body);
-	todo.author = user;
+	todo.author = user._id;
 	todo.save().then(function(todo) {
 		res.send('Todo created');
 	}).catch(function(err) {
@@ -45,7 +45,7 @@ module.exports.create = function(req, res) {
 // step 1: readall todo with all user
 // step 2: readall todo with particular user
 module.exports.readAll = function(req, res) {
-	var user = req.user;
+	var user = req.session.user;
 	Todo.find({
 		author: user._id
 	}).then(function(todos) {

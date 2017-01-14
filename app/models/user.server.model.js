@@ -26,14 +26,14 @@ var UserSchema = new mongoose.Schema({
 	}
 });
 
-// statics and methods 
+// statics and methods
 /**
  * Pre save, use to create salt and assign password with function encryptPassword
  * @param  {[type]} next){} [description]
  * @return {[type]}           [description]
  */
 UserSchema.pre('save', function(next){
-	// if salt is undifined 
+	// if salt is undifined
 	if(this.password && !this.salt ){
 		this.salt = crypto.randomBytes(64).toString('base64');
 		this.password = this.encryptPassword(this.password);
@@ -47,13 +47,13 @@ UserSchema.pre('save', function(next){
  * @return {[String]}          password after encryption
  */
 UserSchema.methods.encryptPassword = function(password){
-	return crypto.pbkdf2Sync(password, this.salt, 10000,64).toString('base64');
+	return crypto.pbkdf2Sync(password, this.salt, 10000,64,'sha1').toString('base64');
 }
 
 /**
  * authenticate the request body(with email and password)
  * @param  body 	request body that contain email and password
- * @return reject error     
+ * @return reject error
  *         resolve user
  */
 UserSchema.statics.authenticate = function(body){

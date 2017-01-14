@@ -5,6 +5,8 @@ var Token = require('mongoose').model('Token');
 var validator = require('is-my-json-valid');
 var winston = require('winston');
 var moment = require('moment');
+var graphAPI = "https://graph.facebook.com/v2.7";
+var request = require('request');
 
 var validate = validator({
 	required: true,
@@ -48,7 +50,8 @@ module.exports.signup = function (req, res) {
 };
 
 module.exports.login = function (req, res) {
-	var body = req.body;
+	let body = req.body;
+	let token = null;
 	validate(body);
 	if (validate.errors !== null) {
 		res.send(401).send('Invalid email or password');
@@ -56,10 +59,10 @@ module.exports.login = function (req, res) {
 	}
 
 	// authenticate
-	var userInstance;
+	let userInstance;
 	User.authenticate(body).then(function (user) {
-		var token = user.generateToken();
-		var tokenModelInstace = new Token({
+		token = user.generateToken();
+		let tokenModelInstace = new Token({
 			token: token,
 			provider: 'local',
 			lastVisited: moment()
@@ -70,7 +73,9 @@ module.exports.login = function (req, res) {
 		return tokenModelInstace.save();
 
 	}).then(function (tokenInstace) {
-		res.header('Auth', tokenInstace.token).json(userInstance.toPublicJSON());
+		req.session.login(userInstance, token,function(err){
+			res.header('Auth', tokenInstace.token).json(userInstance.toPublicJSON());
+		})
 
 	}).catch(function (err) {
 		winston.log('error', "authenicate error")
@@ -83,6 +88,7 @@ module.exports.logout = function (req, res) {
 	Token.remove({
 		token: token
 	}).then(function (token) {
+		req.session.destroy();
 		if (token.result.n !== 0)
 			res.send('logout success');
 		else
@@ -92,4 +98,17 @@ module.exports.logout = function (req, res) {
 		winston.log('error', 'logout error : ', err);
 		res.status(404).send('logout error');
 	})
+}
+
+// get profile - either local and facebook, google
+module.exports.getProfile = function (req, res) {
+	// console.log("------------- user in session ", req.session);
+	var body;
+	var user = req.session.user;
+	var profileURL = graphAPI + '/me?fields=id,name,email,link'
+		+ '&access_token=' + user.providerData.facebook.accessToken;
+	request.get(profileURL, function (errR, resR, bodyR) {
+		body = JSON.parse(bodyR);
+		res.json(body);
+	});
 }

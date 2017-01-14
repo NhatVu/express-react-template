@@ -7,12 +7,18 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com:NhatVu/nodejs-todo-api.git"
+  },
   "author": "Minh Nhat",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
+    "connect-mongo": "^1.3.2",
     "express": "^4.14.0",
+    "express-session": "^1.14.2",
     "is-my-json-valid": "^2.13.1",
     "jsonwebtoken": "^7.1.6",
     "moment": "^2.14.1",
@@ -20,5 +26,8 @@
     "morgan": "^1.7.0",
     "request": "^2.74.0",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
