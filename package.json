@@ -5,7 +5,7 @@
     "main": "server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "npm run build && babel-watch src/server.js",
+        "start": "webpack -p && babel-watch src/server.js",
         "dev": "./node_modules/.bin/webpack-dev-server  --content-base src/public --inline --hot",
         "build": "webpack -p --watch"
     },
@@ -40,10 +40,9 @@
         "babel-loader": "^6.2.10",
         "babel-watch": "^2.0.5",
         "nodemon": "^1.11.0",
-        "webpack": "^1.14.0",
+        "webpack": "^1.14.0"
     },
     "devDependencies": {
-
         "webpack-dev-server": "^1.16.2"
     }
 }
