@@ -1,7 +1,7 @@
 'use stric'
 
 module.exports = {
-	db: 'mongodb://minhnhat:vuminhnhatnhat123@ds111489.mlab.com:11489/heroku_xqwgb0vz',
+	db: 'mongodb://userexpress:vuminhnhatnhat123@ds111549.mlab.com:11549/express-react-template',
 	facebook: {
 		clientId: '575835819273024',
 		clientSecret: '0ef0ea2ac652069a0358bb5e25cbb7e3',
