@@ -56,6 +56,8 @@ module.exports = function() {
 	require('../app/routes/todo.server.route')(app);
 	require('../app/routes/facebookOAuth.server.route')(app);
 
+	// routing for react must place at the end. So other route can you. such as /profile, /test
+	// especially api/todos?access_token
 	require('../app/routes/reactRoutes')(app);
 	app.use(express.static('./public'));
 
