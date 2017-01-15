@@ -4,5 +4,5 @@ import AppRoutes from './AppRoutes.jsx'
 
 window.onload = () => {
 	ReactDOM.render(
-		<AppRoutes/>, document.getElementById('render-target'));
+		<AppRoutes/>, document.getElementById('render'));
 };

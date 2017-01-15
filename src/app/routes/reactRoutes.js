@@ -6,17 +6,15 @@ import {renderToString} from 'react-dom/server';
 import {match, RouterContext} from 'react-router';
 import routes from '../../client/routes';
 import NotFound from '../../ui/pages/NotFound.jsx';
+var path = require("path");
 
 module.exports = function(app) {
 
 	app.get('*', (req, res) => {
-		console.log("request url", req.url);
 		match({
 			routes,
 			location: req.url
 		}, (err, redirectLocation, renderProps) => {
-			console.log("redirectLocation: ", redirectLocation);
-			console.log("renderProps: ", renderProps);
 			// in case of error display the error message
 			if (err) {
 				return res.status(500).send(err.message);
@@ -36,10 +34,11 @@ module.exports = function(app) {
 				// otherwise we can render a 404 page
 				markup = renderToString(<NotFound/>);
 				res.status(404);
+
 			}
 
 			// render the index template with the embedded React markup
-			// return res.redirect("/");
+			//return res.sendFile(path.join(__dirname, '..', '..', 'public', 'main.html'));
 			return res.render('index', {markup});
 		});
 	});

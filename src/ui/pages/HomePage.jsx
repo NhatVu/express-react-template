@@ -6,6 +6,22 @@ export default class HomePage extends React.Component {
 	}
 
 	render() {
-		return <h1>Home Page</h1>
+		return (
+			<div class="container">
+				<div class="jumbotron text-center">
+					<h1>
+						<span class="glyphicon glyphicon-lock"></span>
+						Node Authentication
+					</h1>
+					<p>Login or Register with:
+					</p>
+
+					<a href="/login.html" class="btn btn-default">
+						<span class="glyphicon glyphicon-user"></span>Login</a>
+					<a href="/signup.html" class="btn btn-default">
+						<span class="glyphicon glyphicon-user"></span>Signup</a>
+				</div>
+			</div>
+		)
 	}
 }

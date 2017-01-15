@@ -25,6 +25,8 @@ module.exports = function() {
 
 	app.set('view engine', 'ejs');
 	app.set('views', path.join(__dirname, '..', 'views'));
+
+	app.use(express.static(path.join(__dirname, '..', 'public')));
 	// config session
 	session.Session.prototype.login = function login(user, token, cb) {
 		var req = this.req;
@@ -51,6 +53,7 @@ module.exports = function() {
 		resave: false,
 		saveUninitialized: true
 	}));
+
 	// routing file
 	require('../app/routes/user.server.route')(app);
 	require('../app/routes/todo.server.route')(app);
@@ -59,7 +62,6 @@ module.exports = function() {
 	// routing for react must place at the end. So other route can you. such as /profile, /test
 	// especially api/todos?access_token
 	require('../app/routes/reactRoutes')(app);
-	app.use(express.static('./public'));
 
 	return app;
 }

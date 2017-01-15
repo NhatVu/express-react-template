@@ -10,9 +10,17 @@ module.exports = {
 		? "inline-sourcemap"
 		: null,
 	output: {
-		path: '/js',
+		path: path.join(__dirname, 'src', 'public', 'js'),
 		filename: 'bundle.js',
-		publicPath: '/js'
+		publicPath: '/js/'
+	},
+	devServer: {
+		inline: true,
+		port: 3333,
+		contentBase: "src/public/",
+		historyApiFallback: {
+			index: '/index.html'
+		}
 	},
 	module: {
 		resolve: {
@@ -25,7 +33,10 @@ module.exports = {
 				loader: ['babel-loader'],
 				query: {
 					cacheDirectory: 'babel_cache',
-					presets: ['react', 'es2015', 'stage-0']
+					"plugins": ["react-html-attrs"],
+					presets: debug
+						? ['react', 'es2015', 'react-hmre', 'stage-0']
+						: ['react', 'es2015', 'stage-0']
 				}
 			}
 		]
@@ -33,14 +44,19 @@ module.exports = {
 	plugins: debug
 		? []
 		: [
+			new webpack.DefinePlugin({
+				'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+			}),
 			new webpack.optimize.DedupePlugin(),
 			new webpack.optimize.OccurenceOrderPlugin(),
 			new webpack.optimize.UglifyJsPlugin({
-				mangle: false,
-				sourcemap: false,
 				compress: {
 					warnings: false
-				}
+				},
+				mangle: true,
+				sourcemap: false,
+				beautify: false,
+				dead_code: true
 			})
 		]
 };
