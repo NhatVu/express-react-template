@@ -2,8 +2,9 @@
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var PORT = process.env.PORT || 3000;
-var mongoose = require('./src/config/mongoose');
-var express = require('./src/config/express');
+var mongoose = require('./config/mongoose');
+var express = require('./config/express');
+let path = require("path");
 
 // execute mongoose first, because we need model for the other thing
 mongoose();

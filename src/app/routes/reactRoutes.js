@@ -4,17 +4,19 @@ var express = require('express');
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {match, RouterContext} from 'react-router';
-import routes from '../../../client/routes';
-import NotFoundPage from '../../ui/pages/NotFound.jsx';
+import routes from '../../client/routes';
+import NotFound from '../../ui/pages/NotFound.jsx';
 
 module.exports = function(app) {
 
 	app.get('*', (req, res) => {
+		console.log("request url", req.url);
 		match({
 			routes,
 			location: req.url
 		}, (err, redirectLocation, renderProps) => {
-
+			console.log("redirectLocation: ", redirectLocation);
+			console.log("renderProps: ", renderProps);
 			// in case of error display the error message
 			if (err) {
 				return res.status(500).send(err.message);
@@ -37,6 +39,7 @@ module.exports = function(app) {
 			}
 
 			// render the index template with the embedded React markup
+			// return res.redirect("/");
 			return res.render('index', {markup});
 		});
 	});

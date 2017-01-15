@@ -4,7 +4,8 @@ const path = require('path');
 var debug = process.env.NODE_ENV !== "production";
 
 module.exports = {
-	entry: path.join(__dirname, 'client', 'client.js'),
+	// context: path.join(__dirname, "src"),
+	entry: path.join(__dirname, "src", 'client', 'client.js'),
 	devtool: debug
 		? "inline-sourcemap"
 		: null,
@@ -14,14 +15,17 @@ module.exports = {
 		publicPath: '/js'
 	},
 	module: {
+		resolve: {
+			extensions: ['', '.js', '.js']
+		},
 		loaders: [
 			{
-				test: /\.jsx?$/,
+				test: /.jsx?$/,
 				exclude: /(node_modules|bower_components)/,
 				loader: ['babel-loader'],
 				query: {
 					cacheDirectory: 'babel_cache',
-					presets: ['react', 'es2015']
+					presets: ['react', 'es2015', 'stage-0']
 				}
 			}
 		]
@@ -31,6 +35,12 @@ module.exports = {
 		: [
 			new webpack.optimize.DedupePlugin(),
 			new webpack.optimize.OccurenceOrderPlugin(),
-			new webpack.optimize.UglifyJsPlugin({mangle: false, sourcemap: false})
+			new webpack.optimize.UglifyJsPlugin({
+				mangle: false,
+				sourcemap: false,
+				compress: {
+					warnings: false
+				}
+			})
 		]
 };

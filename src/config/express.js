@@ -8,6 +8,7 @@ var mongoose = require('./mongoose');
 var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongooseModule = require('mongoose');
+var path = require("path");
 
 // var cookieParser = require('cookie-parser');
 
@@ -22,6 +23,8 @@ module.exports = function() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
 
+	app.set('view engine', 'ejs');
+	app.set('views', path.join(__dirname, '..', 'views'));
 	// config session
 	session.Session.prototype.login = function login(user, token, cb) {
 		var req = this.req;
@@ -52,8 +55,8 @@ module.exports = function() {
 	require('../app/routes/user.server.route')(app);
 	require('../app/routes/todo.server.route')(app);
 	require('../app/routes/facebookOAuth.server.route')(app);
-	require('../app/routes/reactRoutes')(app);
 
+	require('../app/routes/reactRoutes')(app);
 	app.use(express.static('./public'));
 
 	return app;
