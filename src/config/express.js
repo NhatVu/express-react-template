@@ -25,6 +25,7 @@ module.exports = function() {
 	app.use(bodyParser.urlencoded({extended: true}));
 
 	app.use(express.static(path.join(__dirname, '..', 'public')));
+	app.use(express.static(path.join(__dirname, '..', '..', 'node_modules', 'admin-lte')));
 	// config session
 	session.Session.prototype.login = function login(user, token, cb) {
 		let req = this.req;
