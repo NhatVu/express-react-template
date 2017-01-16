@@ -9,6 +9,7 @@ module.exports = {
 	devtool: debug
 		? "inline-sourcemap"
 		: null,
+	debug: true,
 	output: {
 		path: path.join(__dirname, 'src', 'public', 'js'),
 		filename: 'bundle.js',
@@ -24,7 +25,7 @@ module.exports = {
 	},
 	module: {
 		resolve: {
-			extensions: ['', '.js', '.js']
+			extensions: ['', '.js', '.jsx']
 		},
 		loaders: [
 			{
@@ -35,19 +36,25 @@ module.exports = {
 					cacheDirectory: 'babel_cache',
 					"plugins": ["react-html-attrs"],
 					presets: debug
-						? ['react', 'es2015', 'react-hmre', 'stage-0']
+						? ['react', 'es2015', 'stage-0']
 						: ['react', 'es2015', 'stage-0']
 				}
 			}
 		]
 	},
 	plugins: debug
-		? []
+		? [new webpack.optimize.UglifyJsPlugin({
+				compress: {
+					warnings: false
+				}
+			})]
 		: [
 			new webpack.DefinePlugin({
-				'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+				'process.env': {
+					NODE_ENV: JSON.stringify('production')
+				}
 			}),
-			new webpack.optimize.DedupePlugin(),
+			new webpack.optimize.UglifyJsPlugin(),
 			new webpack.optimize.OccurenceOrderPlugin(),
 			new webpack.optimize.UglifyJsPlugin({
 				compress: {

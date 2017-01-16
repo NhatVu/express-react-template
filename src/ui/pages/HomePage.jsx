@@ -5,6 +5,10 @@ export default class HomePage extends React.Component {
 		super()
 	}
 
+	componentDidMount() {
+		console.log("component did mount");
+	}
+
 	render() {
 		return (
 			<div class="container">

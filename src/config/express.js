@@ -1,20 +1,21 @@
 'use strict'
 
-var express = require('express');
+import express from 'express';
 //var morgan = require('morgan');
-var compression = require('compression');
-var bodyParser = require('body-parser');
-var mongoose = require('./mongoose');
-var session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
-const mongooseModule = require('mongoose');
-var path = require("path");
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import mongoose from './mongoose';
+import session from 'express-session';
+// const MongoStore = require('connect-mongo')(session);
+import connectMongo from 'connect-mongo';
+import mongooseModule from 'mongoose';
+import path from "path";
 
 // var cookieParser = require('cookie-parser');
 
 module.exports = function() {
-	var app = express();
-
+	let app = express();
+	let MongoStore = connectMongo(session)
 	// if (process.env.NODE_ENV == 'development')
 	//     app.use(morgan('dev'));
 	if (process.env.NODE_ENV == 'production')
@@ -23,13 +24,10 @@ module.exports = function() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: true}));
 
-	app.set('view engine', 'ejs');
-	app.set('views', path.join(__dirname, '..', 'views'));
-
 	app.use(express.static(path.join(__dirname, '..', 'public')));
 	// config session
 	session.Session.prototype.login = function login(user, token, cb) {
-		var req = this.req;
+		let req = this.req;
 		this.regenerate(function(err) {
 			if (err) {
 				cb(err);

@@ -5,7 +5,13 @@ export default class Login extends React.Component {
 		super()
 	}
 
+	componentWillMount() {
+		console.log("Mount component reset");
+		// alert("mount");
+	}
+
 	render() {
+		console.log("login")
 		return (
 			<h1>Login</h1>
 		)
