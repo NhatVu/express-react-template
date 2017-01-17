@@ -8,7 +8,6 @@ export default class Login extends React.Component {
     componentWillMount() {
         // alert("mount");
     }
-
     render() {
         return (
             <div class="container">

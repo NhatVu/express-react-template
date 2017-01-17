@@ -15,37 +15,37 @@ let Token = mongoose.model('Token');
  * @return {[type]}        [description]
  */
 module.exports.apiAuthentication = function(req, res, next) {
-	var encryptToken = req.header('Auth') || req.query.access_token || '';
-	let token = null;
-	Token.findOne({
-		token: encryptToken // token that encrypt by EDCrypto.
-	}).then(function(tokenR) {
-		if (!tokenR)
-			throw Error('You must contain valid token in your query');
+    var encryptToken = req.header('Auth') || req.query.access_token || '';
+    let token = null;
+    Token.findOne({
+        token: encryptToken // token that encrypt by EDCrypto.
+    }).then(function(tokenR) {
+        if (!tokenR)
+            throw Error('You must contain valid token in your query');
 
-		// if token is valid, update createdAt. Each request must update createdAt
-		tokenR.createdAt = Date.now();
-		tokenR.save().then(function() {}).catch(function(err) {
-			throw Error('Token save fail');
-		});
-		token = tokenR.token;
-		return User.findByToken(tokenR.token);
+        // if token is valid, update createdAt. Each request must update createdAt
+        tokenR.createdAt = Date.now();
+        tokenR.save().then(function() {}).catch(function(err) {
+            throw Error('Token save fail');
+        });
+        token = tokenR.token;
+        return User.findByToken(tokenR.token);
 
-	}).then(function(user) {
-		req.session.login(user, token, function() {
-			next();
-		})
-	}).catch(function(err) {
-		winston.log('error', 'authenticationMiddle.server.controller requireAuthentication method error', err);
-		res.status(401).send(err.message);
-	})
+    }).then(function(user) {
+        req.session.login(user, token, function() {
+            next();
+        })
+    }).catch(function(err) {
+        winston.log('error', 'authenticationMiddle.server.controller apiAuthentication method error', err);
+        res.status(401).send(err.message);
+    })
 }
 
 module.exports.requireAuthentication = function(req, res, next) {
-	// user authenticationMiddle
-	if (req.session.user) {
-		next();
-	} else {
-		res.redirect("/login.html");
-	}
+    // user authenticationMiddle
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect("/login");
+    }
 }

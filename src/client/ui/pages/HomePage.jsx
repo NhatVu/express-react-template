@@ -5,11 +5,9 @@ export default class HomePage extends React.Component {
         super()
     }
 
-    componentDidMount() {
-        console.log("component did mount");
-    }
-
     render() {
+        const {user} = this.props
+        console.log('user: ', user)
         return (
             <div class="content-wrapper">
                 <section class="content-header">

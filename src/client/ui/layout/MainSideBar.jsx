@@ -6,6 +6,7 @@ export default class MainSideBar extends React.Component {
     }
 
     render() {
+        const {user} = this.props;
         return (
             <aside class="main-sidebar">
                 {/* <!-- sidebar: style can be found in sidebar.less --> */}
@@ -16,7 +17,7 @@ export default class MainSideBar extends React.Component {
                             <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
                         </div>
                         <div class="pull-left info">
-                            <p>Alexander Pierce</p>
+                            <p>{user.email}</p>
                             <a href="#">
                                 <i class="fa fa-circle text-success"></i>
                                 Online</a>
@@ -138,4 +139,8 @@ export default class MainSideBar extends React.Component {
             </aside>
         )
     }
+}
+
+MainSideBar.propTypes = {
+    user: React.PropTypes.object.isRequired
 }

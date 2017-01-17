@@ -6,7 +6,7 @@ import {fetchTweets} from "../../actions/tweetsActions"
 
 class Redux extends React.Component {
     componentWillMount() {
-        this.props.dispatch(fetchUser())
+        //  this.props.dispatch(fetchUser())
     }
 
     fetchTweets() {
