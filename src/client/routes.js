@@ -12,6 +12,7 @@ import Login from './ui/pages/Login.jsx'
 import NotFound from './ui/pages/NotFound.jsx'
 import SignUp from './ui/pages/SignUp.jsx'
 import UserHomePage from './ui/pages/UserHomePage.jsx'
+import Redux from './ui/pages/Redux.jsx'
 //
 const AdminRoute = (
     <Route path="admin" component={Layout}>
@@ -34,7 +35,7 @@ export const ReactRoutes = (
         <IndexRoute component={UserHomePage}/>
         <Route path="login" component={Login}></Route>
         <Route path="signup" component={SignUp}></Route>
-        {/* <Route path="admin" component={Layout}>
+        <Route path="redux" component={Redux}/> {/* <Route path="admin" component={Layout}>
             <IndexRoute component={HomePage}/>
             <Route path="index.html" component={HomePage}/>
             <Route path="*" component={NotFound}/>

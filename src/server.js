@@ -10,7 +10,6 @@ let path = require("path");
 mongoose();
 
 var app = express();
-console.log("host name", require('dns').getServers());
 app.listen(PORT, function() {
     console.log('Server listen at port: ', PORT);
 })
