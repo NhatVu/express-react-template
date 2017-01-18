@@ -1,7 +1,5 @@
 import axios from "axios";
 
-export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
-
 // return action object.
 export function fetchTweets() {
     return function(dispatch) {

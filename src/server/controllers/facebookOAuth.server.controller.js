@@ -15,9 +15,7 @@ module.exports.oauthFacebook = function(req, res) {
     var oauthEndpoint = config.facebook.oauthEndpoint;
 
     oauthEndpoint += '?client_id=' + config.facebook.clientId + '&redirect_uri=' + config.facebook.callbackURI + '&response_type=' + config.facebook.responseType + '&scope=' + config.facebook.scope;
-    console.log(oauthEndpoint);
     res.redirect(oauthEndpoint);
-    // axios.get(oauthEndpoint)
 }
 
 // chua xu ly truong hop token cua facebook het han
@@ -26,7 +24,6 @@ module.exports.oauthFacebookCallback = function(reqExpress, resExpress) {
 
     var accessTokenEndpoint = config.facebook.accessTokenEndpoint;
     accessTokenEndpoint += '?client_id=' + config.facebook.clientId + '&client_secret=' + config.facebook.clientSecret + '&redirect_uri=' + config.facebook.callbackURI + '&code=' + code;
-    //var accessTokenEndpoint = "http://www.google.com.vn";
     request(accessTokenEndpoint, function(err, res, body) {
         var data = JSON.parse(body);
         accessToken = data.access_token;
@@ -69,7 +66,8 @@ module.exports.oauthFacebookCallback = function(reqExpress, resExpress) {
                 // console.log("-------------------session", reqExpress.session);
                 let token = tokenR.token;
                 reqExpress.session.login(userInstance, token, function(err) {
-                    resExpress.header('Auth', token).json(userInstance.toPublicJSON());
+                    //resExpress.header('Auth', token).json(userInstance.toPublicJSON());
+                    resExpress.redirect('/admin')
                 })
             }).catch(function(err) {
                 winston.log('error', 'sign in with facebook error :', err);
@@ -78,15 +76,3 @@ module.exports.oauthFacebookCallback = function(reqExpress, resExpress) {
         });
     });
 }
-
-// module.exports.getProfile = function (req, res) {
-// 	// console.log("------------- user in session ", req.session);
-// 	var body;
-// 	var user = req.session.user;
-// 	var profileURL = graphAPI + '/me?fields=id,name,email,link'
-// 		+ '&access_token=' + user.providerData.facebook.accessToken;
-// 	request.get(profileURL, function (errR, resR, bodyR) {
-// 		body = JSON.parse(bodyR);
-// 		res.json(body);
-// 	});
-// }

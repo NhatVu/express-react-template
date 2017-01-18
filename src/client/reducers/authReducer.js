@@ -1,4 +1,4 @@
-import {SET_CURRENT_USER, LOGIN_FAIL} from '../actions/types';
+import {SET_CURRENT_USER, LOGIN_FAIL, LOGOUT_FAIL, LOGOUT_SUCCESS} from '../actions/types';
 import _ from 'lodash';
 
 const initialState = {
@@ -19,6 +19,17 @@ export default(state = initialState, action = {}) => {
                 ...state,
                 isAuthenticated: false,
                 user: null
+            }
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                isAuthenticated: false,
+                user: null
+            }
+        case LOGOUT_FAIL:
+            return {
+                ...state,
+                error: action.payload
             }
         default:
             return state;

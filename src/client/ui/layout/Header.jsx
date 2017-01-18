@@ -1,8 +1,16 @@
 import React from 'react'
+import {Link} from 'react-router'
+import {connect} from 'react-redux'
+import {logout} from '../../actions/authActions'
 
-export default class Header extends React.Component {
+class Header extends React.Component {
     constructor() {
         super()
+    }
+
+    logout() {
+        this.props.logout();
+        // this.props.router.push('/login')
     }
 
     render() {
@@ -56,7 +64,7 @@ export default class Header extends React.Component {
                                             <a href="#" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                            <a href="#" class="btn btn-default btn-flat" onClick={this.logout.bind(this)}>Sign out</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -72,3 +80,5 @@ export default class Header extends React.Component {
 Header.propTypes = {
     user: React.PropTypes.object.isRequired
 }
+
+export default connect(null, {logout})(Header)

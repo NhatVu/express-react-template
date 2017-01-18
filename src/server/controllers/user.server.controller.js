@@ -67,7 +67,8 @@ module.exports.login = function(req, res) {
 
     }).then(function(tokenInstace) {
         req.session.login(userInstance, token, function(err) {
-            res.header('Auth', tokenInstace.token).json(userInstance.toPublicJSON());
+            //res.header('Auth', tokenInstace.token).json(userInstance.toPublicJSON());
+            res.redirect('/admin')
         })
 
     }).catch(function(err) {
@@ -78,15 +79,15 @@ module.exports.login = function(req, res) {
 
 module.exports.logout = function(req, res) {
     var token = req.header('Auth') || req.query.access_token || "";
-    Token.remove({token: token}).then(function(token) {
-        req.session.destroy();
-        if (token.result.n !== 0)
-            res.send('logout success');
-        else
-            throw new Error("You haven't yet logged in");
-
-        }
-    ).catch(function(err) {
+    console.log('logout token', token);
+    req.session.destroy();
+    Token.remove({token: token}).then(function(tokenR) {
+        // if (tokenR.result.n !== 0)
+        // console.log("tokenR remove", tokenR);
+        res.send('logout success');
+        // else
+        //     throw new Error("You haven't yet logged in");
+    }).catch(function(err) {
         winston.log('error', 'logout error : ', err);
         res.status(404).send('logout error');
     })
